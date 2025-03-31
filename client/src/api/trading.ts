@@ -49,26 +49,26 @@ export const getActiveTrades = () => {
     setTimeout(() => {
       resolve({
         trades: [
-          { 
-            id: '1', 
-            symbol: 'BTC', 
-            type: 'long', 
-            entry: 42100, 
-            current: 43250.23, 
-            pnl: 234.56, 
+          {
+            id: '1',
+            symbol: 'BTC',
+            type: 'long',
+            entry: 42100,
+            current: 43250.23,
+            pnl: 234.56,
             leverage: 15,
             liquidationPrice: 38750,
             stopLoss: 41800,
             takeProfit: 43200,
             size: 0.5
           },
-          { 
-            id: '2', 
-            symbol: 'ETH', 
-            type: 'short', 
-            entry: 2300, 
-            current: 2250.45, 
-            pnl: 89.12, 
+          {
+            id: '2',
+            symbol: 'ETH',
+            type: 'short',
+            entry: 2300,
+            current: 2250.45,
+            pnl: 89.12,
             leverage: 10,
             liquidationPrice: 2850,
             stopLoss: 2980,
@@ -151,6 +151,62 @@ export const getOrderBook = () => {
       resolve({
         bids: Array.from({ length: 10 }, (_, i) => [42000 - i * 10, Math.random() * 10]),
         asks: Array.from({ length: 10 }, (_, i) => [42100 + i * 10, Math.random() * 10])
+      });
+    }, 500);
+  });
+};
+
+// Description: Get candlestick data
+// Endpoint: GET /api/trading/candles
+// Request: { symbol: string, interval: string }
+// Response: { candles: Array<{ timestamp: number, open: number, high: number, low: number, close: number, volume: number }> }
+export const getCandlestickData = (symbol: string) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        candles: Array.from({ length: 100 }, (_, i) => {
+          const basePrice = symbol === 'BTC' ? 42000 : 2200;
+          const timestamp = Date.now() - (99 - i) * 60 * 1000;
+          const randomChange = (Math.random() - 0.5) * 100;
+          const open = basePrice + randomChange;
+          const close = open + (Math.random() - 0.5) * 50;
+          const high = Math.max(open, close) + Math.random() * 25;
+          const low = Math.min(open, close) - Math.random() * 25;
+          return {
+            timestamp,
+            open,
+            high,
+            low,
+            close,
+            volume: Math.random() * 100
+          };
+        })
+      });
+    }, 500);
+  });
+};
+
+// Description: Get technical indicators
+// Endpoint: GET /api/trading/indicators
+// Request: { symbol: string }
+// Response: { indicators: { rsi: number, macd: { value: number, signal: number, histogram: number }, bb: { upper: number, middle: number, lower: number } } }
+export const getTechnicalIndicators = (symbol: string) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        indicators: {
+          rsi: 45 + Math.random() * 10,
+          macd: {
+            value: Math.random() * 2 - 1,
+            signal: Math.random() * 2 - 1,
+            histogram: Math.random() * 0.5 - 0.25
+          },
+          bb: {
+            upper: 43000 + Math.random() * 200,
+            middle: 42500 + Math.random() * 100,
+            lower: 42000 + Math.random() * 200
+          }
+        }
       });
     }, 500);
   });
